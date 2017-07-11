@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Doctype no need since xsd is more powerful than dtd -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-3.2.xsd"
+    default-init-method="myInit" default-destroy-method="destory">
+    
+    <bean id="parrenttriangle" class="org.liang.Triangle" abstract="true">
+     <property name="pointA" ref="pointA"></property>
+    	<property name="points">
+    		<list>
+    			<ref bean="pointA"/>
+    		</list>
+    	</property>
+    </bean>
+    
+    <bean id="triangle1" class="org.liang.Triangle" parent="parrenttriangle" autowire="byName">
+    	<property name="points">
+    		<list merge="true">
+    			<ref bean="pointB"/>
+    			<ref bean="pointC"/>
+    		</list>
+    	</property>
+    </bean>
+    
+    <bean id="triangle2" class="org.liang.Triangle" parent="parrenttriangle" >
+    <property name="pointC" ref="pointB"></property>
+    <property name="pointB" ref="pointC"></property>
+    <property name="points">
+    		<list merge="true">
+    			<ref bean="pointB"/>
+    			<ref bean="pointC"/>
+    		</list>
+    	</property>
+    </bean>
+    
+   	<bean id="pointA" class="org.liang.Point">
+    		<property name="x" value="${pointA.pointx}" />
+    		<property name="y" value="${pointA.pointy}" />
+   	</bean>
+   	 <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+   	 	<property name="locations" value="pointsconfig.properties"/>
+   	 </bean>
+   	
+   	<bean id="pointB" class="org.liang.Point">
+    		<constructor-arg type="int" value = "0" ></constructor-arg>
+    		<constructor-arg type = "int" value = "0"></constructor-arg>
+   	</bean>
+   	<bean id="pointC" class="org.liang.Point">
+    		<property name="x" value="30" />
+    		<property name="y" value="0" />
+   	</bean>
+	<bean id = "test" class="org.liang.Test" name="test" >
+		<constructor-arg  value = "testor"></constructor-arg>
+		<constructor-arg  type="int" value = "10"></constructor-arg>
+	</bean>
+
+   <bean class="org.liang.MyBeanFactoryPP"></bean>
+   
+   
+   
+ </beans>
